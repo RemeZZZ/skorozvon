@@ -1,5 +1,6 @@
 import env from 'dotenv';
 import Skorozvon from '../utils/Skorozvon.js';
+import { addLead } from '../store/index.js';
 
 env.config();
 
@@ -11,6 +12,10 @@ export async function sendLeads(request, response) {
 
     return;
   }
+
+  leads.forEach((item) => {
+    addLead(item.inn, item);
+  });
 
   Skorozvon.sendLeads(leads, targets, tags);
 

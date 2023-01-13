@@ -69,13 +69,29 @@ class Skorozvon {
 
     console.log(leads, tags, targets);
 
+    const formatedLeads = leads.map((item) => {
+      return {
+        name: item.name,
+        phones: item.phones,
+        address: item.address,
+        custom_fields: {
+          FIELD_20000002891: item.inn,
+          FIELD_20000002460: item.ogrn,
+          FIELD_20000002888: item.otcritie,
+          FIELD_20000002887: item.tinkov,
+          FIELD_20000002886: item.alpha,
+          FIELD_20000002885: item.vtb,
+        },
+      };
+    }, []);
+
     const result = await fetch(`${process.env.API_URL}/api/v2/leads/import`, {
       method: 'POST',
 
       headers: headers,
 
       body: JSON.stringify({
-        data: leads,
+        data: formatedLeads,
         targets: targets,
         tags: tags,
       }),

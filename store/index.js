@@ -4,10 +4,14 @@ const dir = process.cwd();
 
 const leadsFileDir = `${dir}/data/leads.json`;
 
-const leads = fs.readFileSync(leadsFileDir, 'utf-8');
+const leads = JSON.parse(fs.readFileSync(leadsFileDir, 'utf-8'));
 
 export function getLeads() {
   return leads;
+}
+
+export function getLeadById(id) {
+  return leads[id];
 }
 
 export function addLead(inn, info) {
@@ -16,4 +20,4 @@ export function addLead(inn, info) {
 
 setInterval(() => {
   fs.writeFileSync(leadsFileDir, JSON.stringify(getLeads()));
-}, 60 * 1000);
+}, 10 * 1000);
