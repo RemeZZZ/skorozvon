@@ -122,23 +122,21 @@ class Skorozvon {
       });
     }
 
-    console.log(sortedLeads);
+    sortedLeads.forEach((item, index) => {
+      setTimeout(() => {
+        fetch(`${process.env.API_URL}/api/v2/leads/import`, {
+          method: 'POST',
 
-    return;
+          headers: headers,
 
-    const result = await fetch(`${process.env.API_URL}/api/v2/leads/import`, {
-      method: 'POST',
-
-      headers: headers,
-
-      body: JSON.stringify({
-        data: formatedLeads,
-        targets: targets.map((target) => target.id),
-        tags: tags,
-      }),
+          body: JSON.stringify({
+            data: item.data,
+            targets: item.targets,
+            tags: tags,
+          }),
+        });
+      }, 1000 * index);
     });
-
-    return result;
   }
 }
 
