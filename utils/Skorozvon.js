@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import env from 'dotenv';
 import https from 'https';
-import { getRandomNumber } from './random.js';
+import { getRandomNumber, shuffleArray } from './random.js';
 
 env.config();
 
@@ -68,9 +68,9 @@ class Skorozvon {
       'Content-Type': 'application/json',
     };
 
-    console.log(leads, tags, targets);
+    const shuffleLeads = shuffleArray(leads);
 
-    const formatedLeads = leads.map((item) => {
+    const formatedLeads = shuffleLeads.map((item) => {
       return {
         name: item.orgName || `ИП ${item.name}`,
         phones: item.phones,
@@ -97,13 +97,7 @@ class Skorozvon {
       let leads = [];
 
       for (let i = 0; i < count; i++) {
-        const random = getRandomNumber(1);
-
-        if (random) {
-          leads.push(formatedLeads.pop());
-        } else {
-          leads.push(formatedLeads.shift());
-        }
+        leads.push(formatedLeads.pop());
       }
 
       targetsLeads.push({
