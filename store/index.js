@@ -6,6 +6,10 @@ const leadsFileDir = `${dir}/data/leads.json`;
 
 const leads = JSON.parse(fs.readFileSync(leadsFileDir, 'utf-8'));
 
+export function getVtbConfig() {
+  return JSON.parse(fs.readFileSync(`${dir}/data/vtb.regions.json`, 'utf-8'));
+}
+
 export function getLeads() {
   return leads;
 }

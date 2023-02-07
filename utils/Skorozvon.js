@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import env from 'dotenv';
 import https from 'https';
+import { getRandomNumber } from './random.js';
 
 env.config();
 
@@ -77,6 +78,8 @@ class Skorozvon {
         custom_fields: {
           FIELD_20000002891: item.inn,
           FIELD_20000002460: item.ogrn,
+          FIELD_20000002445: item.orgName || `ИП ${item.name}`,
+          //FIELD_20000002889: `${process.env.HOST_URL}/sendLead/?inn=${item.inn}`,
           FIELD_20000002888: item.otcritie,
           FIELD_20000002887: item.tinkov,
           FIELD_20000002886: item.alpha,
@@ -85,6 +88,44 @@ class Skorozvon {
       };
     }, []);
 
+    const formatedLength = formatedLeads.length;
+
+    const sortedLeads = targets.reduce((targetsLeads, target) => {
+      const percentage = +target.percentage / 100;
+
+      const count = formatedLength * percentage;
+
+      let leads = [];
+
+      for (let i = 0; i < count; i++) {
+        const random = getRandomNumber(1);
+
+        if (random) {
+          leads.push(formatedLeads.pop());
+        } else {
+          leads.push(formatedLeads.shift());
+        }
+      }
+
+      targetsLeads.push({
+        targets: [target.id],
+        data: leads.filter((lead) => lead),
+      });
+
+      return targetsLeads;
+    }, []);
+
+    if (formatedLeads.length) {
+      sortedLeads.push({
+        targets: targets.map((target) => target.id),
+        data: formatedLeads.filter((lead) => lead),
+      });
+    }
+
+    console.log(sortedLeads);
+
+    return;
+
     const result = await fetch(`${process.env.API_URL}/api/v2/leads/import`, {
       method: 'POST',
 
@@ -92,7 +133,7 @@ class Skorozvon {
 
       body: JSON.stringify({
         data: formatedLeads,
-        targets: targets,
+        targets: targets.map((target) => target.id),
         tags: tags,
       }),
     });
