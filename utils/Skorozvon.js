@@ -72,13 +72,12 @@ class Skorozvon {
 
     const formatedLeads = leads.map((item) => {
       return {
-        name: item.name,
+        name: item.orgName || `ИП ${item.name}`,
         phones: item.phones,
         address: item.address,
         custom_fields: {
           FIELD_20000002891: item.inn,
           FIELD_20000002460: item.ogrn,
-          FIELD_20000002445: item.orgName || `ИП ${item.name}`,
           //FIELD_20000002889: `${process.env.HOST_URL}/sendLead/?inn=${item.inn}`,
           FIELD_20000002888: item.otcritie,
           FIELD_20000002887: item.tinkov,
