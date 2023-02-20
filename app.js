@@ -6,7 +6,7 @@ import cors from './middlewares/cors.js';
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(
   bodyParser.urlencoded({
     extended: true,
