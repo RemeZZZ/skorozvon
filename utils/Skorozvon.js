@@ -131,6 +131,20 @@ class Skorozvon {
       }, 1000 * index);
     });
   }
+
+  async getOperators() {
+    const headers = {
+      Authorization: `Bearer ${this.token}`,
+    };
+
+    const response = await fetch(`${process.env.API_URL}/api/v2/users`, {
+      headers: headers,
+    });
+
+    const result = await response.json();
+
+    return result;
+  }
 }
 
 export default new Skorozvon();

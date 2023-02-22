@@ -25,3 +25,7 @@ app.use(errorLogger);
 app.listen(4101, () => {
   console.log('App listening on port 4101');
 });
+
+process.on('unhandledRejection', (event) => {
+  console.log(event);
+});
